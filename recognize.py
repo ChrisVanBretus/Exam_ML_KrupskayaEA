@@ -8,12 +8,14 @@ model = joblib.load("face_model.pkl")
 labels = joblib.load("labels.pkl")
 
 test_folder = "test_dataset"
+output_folder = "results"
+os.makedirs(output_folder, exist_ok=True)
 
 for img_name in os.listdir(test_folder):
     img_path = os.path.join(test_folder, img_name)
     image = cv2.imread(img_path)
     if image is None:
-        print(f"Не удалось открыть файл {img_name}")
+        print(f"❌ Не удалось открыть файл {img_name}")
         continue
 
     face, box = detect_face(image)
@@ -41,6 +43,8 @@ for img_name in os.listdir(test_folder):
     cv2.putText(image, text, (x, y - 10),
                 cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
 
-    cv2.imshow(f"Результат: {img_name}", image)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    output_path = os.path.join(output_folder, img_name)
+    cv2.imwrite(output_path, image)
+    print(f"Результат сохранён: {output_path}")
+
+print("Обработка завершена!")
