@@ -32,16 +32,15 @@ for img_name in os.listdir(test_folder):
     name = labels[best_id]
 
     x, y, w, h = map(int, box)
-    if confidence >= 70:
-        text = f"Добро пожаловать, {name}! ({confidence:.1f}%)"
+    if confidence >= 30:
+        text = f"Hi, {name}! ({confidence:.1f}%)"
         color = (0, 255, 0)
     else:
-        text = "Доступ запрещён"
+        text = "Error"
         color = (0, 0, 255)
 
     cv2.rectangle(image, (x, y), (x + w, y + h), color, 2)
-    cv2.putText(image, text, (x, y - 10),
-                cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
+    cv2.putText(image, text, (x, y + h + 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
 
     output_path = os.path.join(output_folder, img_name)
     cv2.imwrite(output_path, image)
